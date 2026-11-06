@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.mzagaming.mindgrid",
+        "sha256_cert_fingerprints": ["DD:6B:F4:6B:17:D1:2E:32:10:4A:86:2E:A0:90:D9:24:14:86:C4:46:93:7F:AD:1E:8E:A1:58:7F:D7:FF:87:A7"]
+      }
+    }]
