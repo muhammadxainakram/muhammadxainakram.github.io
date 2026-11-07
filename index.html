@@ -8,14 +8,15 @@
 <meta property="og:title" content="MZA Gaming · Game Store">
 <meta property="og:description" content="Calm, clever puzzle games for Android and the web.">
 <meta property="og:image" content="https://mzagames.github.io/games/mindgrid/feature.png">
-<meta name="theme-color" content="#0f172a">
-<link rel="icon" href="mza-logo.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="mza-icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="mza-icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f4f6fb;--card:#fff;--ink:#0f172a;--muted:#5b6475;--line:#e3e8f1;--soft:#eef2f8;
-  --play:#0f172a;--play-ink:#fff;--accent:#2f6fed;--ok:#16a34a;--beta:#2f6fed;--soon:#b45309;
+  --play:#0f172a;--play-ink:#fff;--accent:#2f6fed;--ok:#16a34a;--beta:#2f6fed;--soon:#b45309;--brand:#e3161e;
   --shadow:0 12px 32px rgba(15,23,42,.08);--shadow-lg:0 24px 60px rgba(15,23,42,.16)
 }
 @media (prefers-color-scheme:dark){:root{
@@ -31,15 +32,18 @@ img{display:block;max-width:100%}
 .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-/* top bar */
-.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px;color:var(--ink);text-decoration:none}
-.brand img{width:36px;height:36px}
-.brand small{font-weight:700;color:var(--muted);font-size:13px;margin-left:2px}
-.nav{display:flex;gap:6px}
-.nav a{color:var(--muted);text-decoration:none;font-weight:800;font-size:14.5px;padding:8px 12px;border-radius:10px}
-.nav a:hover{background:var(--soft);color:var(--ink)}
+/* top bar (brand: black, white, MZA red) */
+.top{position:sticky;top:0;z-index:20;background:rgba(8,8,10,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--brand) 20%,var(--brand) 80%,transparent)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff}
+.brand img{height:44px;width:auto}
+.brand small{font-weight:800;color:#9ca3af;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding-left:10px;border-left:1px solid rgba(255,255,255,.18)}
+.nav{display:flex;gap:4px;align-items:center}
+.nav a{color:#d1d5db;text-decoration:none;font-weight:800;font-size:14.5px;padding:8px 12px;border-radius:10px}
+.nav a:hover{background:rgba(255,255,255,.09);color:#fff}
+.nav a.cta{background:var(--brand);color:#fff;margin-left:6px}
+.nav a.cta:hover{background:#ff2a33}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;border:2px solid transparent;transition:transform .12s,box-shadow .12s;white-space:nowrap;cursor:pointer}
@@ -59,29 +63,54 @@ img{display:block;max-width:100%}
 .badge.beta{color:var(--beta);background:color-mix(in srgb,var(--beta) 14%,transparent)}
 .badge.soon{color:var(--soon);background:color-mix(in srgb,var(--soon) 16%,transparent)}
 
-/* featured */
-.featured{margin:28px 0 8px;border-radius:32px;overflow:hidden;position:relative;color:#fff;
-  background:radial-gradient(120% 140% at 0% 0%,#1e1b4b 0%,#0f172a 45%,#111827 100%);box-shadow:var(--shadow-lg)}
-.featured::before{content:"";position:absolute;inset:0;background:
-  radial-gradient(40% 50% at 85% 20%,rgba(223,150,40,.35),transparent 70%),
-  radial-gradient(35% 45% at 70% 90%,rgba(123,92,224,.35),transparent 70%),
-  radial-gradient(30% 40% at 15% 100%,rgba(23,153,138,.35),transparent 70%);pointer-events:none}
-.fgrid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;padding:40px;align-items:center}
-.feyebrow{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c7d2fe}
+/* hero slideshow: one slide per game */
+.hero{margin:28px 0 8px;position:relative}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:32px;box-shadow:var(--shadow-lg);overscroll-behavior-x:contain;position:relative;background:#0a0a0c}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;color:#fff;background:var(--sbg)}
+.slide::before{content:"";position:absolute;inset:0;background:var(--sglow);pointer-events:none}
+.sgrid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;padding:44px 64px;align-items:center;min-height:440px}
+.feyebrow{display:flex;gap:8px;align-items:center}
+.feyebrow .badge{background:rgba(255,255,255,.12);color:#fff}
+.feyebrow .badge.hot{background:var(--brand);color:#fff}
 .fhead{display:flex;align-items:center;gap:16px;margin:14px 0 10px}
 .fhead img{width:76px;height:76px;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
-.fhead h1{margin:0;font-size:clamp(30px,4vw,44px);font-weight:900;line-height:1.05;letter-spacing:-.02em}
-.fhead p{margin:4px 0 0;color:#cbd5e1;font-weight:700}
-.fpitch{color:#e2e8f0;font-size:17px;margin:0 0 16px;max-width:520px}
+.fhead h1,.fhead h2{margin:0;font-size:clamp(28px,4vw,44px);font-weight:900;line-height:1.05;letter-spacing:-.02em}
+.fhead p{margin:4px 0 0;color:rgba(255,255,255,.75);font-weight:700}
+.fpitch{color:rgba(255,255,255,.9);font-size:17px;margin:0 0 16px;max-width:520px}
 .fchips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;padding:0;list-style:none}
 .fchips li{font-size:13px;font-weight:800;padding:6px 12px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14)}
 .factions{display:flex;flex-wrap:wrap;gap:10px}
-.featured .btn.play{background:#fff;color:#0f172a}
-.featured .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
-.fnote{margin:12px 0 0;font-size:13px;color:#94a3b8}
-.fnote a{color:#c7d2fe}
-.shots{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 4px 14px;scrollbar-width:thin}
-.shots img{flex:none;width:176px;aspect-ratio:9/16;border-radius:22px;scroll-snap-align:start;box-shadow:0 12px 30px rgba(0,0,0,.4);border:4px solid rgba(255,255,255,.08);background:#1f2937}
+.slide .btn.play{background:#fff;color:#0f172a}
+.slide .btn.ghost{background:rgba(0,0,0,.15);color:#fff;border-color:rgba(255,255,255,.35)}
+.slide .btn.off{background:rgba(255,255,255,.12);color:rgba(255,255,255,.75)}
+.fnote{margin:12px 0 0;font-size:13px;color:rgba(255,255,255,.62)}
+.fnote a{color:#fff}
+/* slide visuals */
+.visual{position:relative;height:340px;display:grid;place-items:center}
+.phones{position:relative;width:100%;height:100%}
+.phones img{position:absolute;top:50%;left:50%;width:168px;aspect-ratio:9/16;border-radius:24px;border:4px solid rgba(255,255,255,.1);box-shadow:0 18px 40px rgba(0,0,0,.45);background:#1f2937}
+.phones img:nth-child(1){transform:translate(-128%,-46%) rotate(-8deg)}
+.phones img:nth-child(2){transform:translate(28%,-46%) rotate(8deg)}
+.phones img:nth-child(3){transform:translate(-50%,-50%);z-index:1;width:184px}
+.art .halo{position:absolute;width:300px;height:300px;border-radius:50%;background:var(--halo);filter:blur(30px);opacity:.55}
+.art .bigicon{position:relative;width:220px;height:220px;border-radius:52px;box-shadow:0 26px 60px rgba(0,0,0,.5);transform:rotate(-4deg)}
+.art .pill{position:absolute;font-size:14px;font-weight:900;padding:9px 14px;border-radius:14px;background:rgba(10,10,12,.72);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(6px);white-space:nowrap;box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.art .pill b{color:var(--pill)}
+.art .p1{top:14%;left:4%}.art .p2{top:44%;right:0}.art .p3{bottom:10%;left:12%}
+/* controls */
+.harrow{position:absolute;top:calc(50% - 50px);transform:translateY(-50%);z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(10,10,12,.55);color:#fff;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}
+.harrow:hover{background:var(--brand);border-color:var(--brand)}
+.harrow svg{width:22px;height:22px}
+.harrow.prev{left:12px}.harrow.next{right:12px}
+.htabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.htab{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;text-align:left;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px;cursor:pointer;transition:border-color .15s,transform .15s}
+.htab:hover{transform:translateY(-1px)}
+.htab img{width:38px;height:38px;border-radius:10px;flex:none}
+.htab b{display:block;font-size:14.5px;font-weight:900;line-height:1.2}
+.htab small{display:block;font-size:12px;font-weight:700;color:var(--muted)}
+.htab[aria-selected="true"]{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.htab i{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--brand)}
 
 /* sections */
 .sechead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:44px 0 16px}
@@ -125,70 +154,161 @@ img{display:block;max-width:100%}
 .about span{color:var(--muted);font-size:15px}
 .support{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px 24px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
 .support p{margin:0;color:var(--muted)}
-footer{padding:36px 0 44px;color:var(--muted);font-size:14px;text-align:center}
-footer a{color:var(--muted)}
+footer{margin-top:44px;padding:30px 16px 40px;color:#9ca3af;font-size:14px;text-align:center;background:#0a0a0c;border-top:2px solid var(--brand)}
+footer a{color:#9ca3af}
+.flogo{display:inline-block;margin-bottom:14px}
+.flogo img{height:48px;width:auto}
 footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-bottom:8px}
 
 .games-empty{display:none;padding:30px;text-align:center;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:22px}
 
 @media (max-width:900px){
-  .fgrid{grid-template-columns:minmax(0,1fr);padding:28px 22px}
-  .shots img{width:150px}
+  .sgrid{grid-template-columns:minmax(0,1fr);padding:28px 22px 24px;gap:8px;min-height:0}
+  .visual{height:250px;order:-1}
+  .phones img{width:122px}.phones img:nth-child(3){width:134px}
+  .art .halo{width:220px;height:220px}
+  .art .bigicon{width:150px;height:150px;border-radius:36px}
+  .art .pill{font-size:12.5px;padding:7px 11px}
   .steps,.about{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:720px){
   .grid{grid-template-columns:minmax(0,1fr)}
   .nav a:not(.keep){display:none}
   .btn{white-space:normal}
-  .featured{border-radius:24px}
+  .track{border-radius:24px}
+  .harrow{display:none}
+  .htabs{gap:6px}
+  .htab{flex-direction:column;gap:4px;padding:8px 4px;text-align:center}
+  .htab b{font-size:12px}
+  .htab small{display:none}
+  .brand img{height:38px}
+  .brand small{display:none}
 }
+@media (max-width:420px){.art .p2{right:-4px}.art .p1{left:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="./"><img src="mza-logo.svg" alt="">MZA Gaming <small>Store</small></a>
+    <a class="brand" href="./" aria-label="MZA Games store home"><img src="mza-games-logo.png" alt="MZA Games" width="86" height="44"><small>Game Store</small></a>
     <nav class="nav" aria-label="Main">
-      <a href="#games" class="keep">Games</a>
       <a href="#beta">Join a beta</a>
       <a href="#about">About</a>
       <a href="#support">Support</a>
+      <a href="#games" class="keep cta">All games</a>
     </nav>
   </div>
 </header>
 
 <main class="wrap">
-  <!-- FEATURED -->
-  <section class="featured" aria-labelledby="feat-title">
-    <div class="fgrid">
-      <div>
-        <div class="feyebrow"><span class="badge beta" style="background:rgba(122,167,255,.18);color:#c7d2fe"><i></i>New · Beta on Google Play</span></div>
-        <div class="fhead">
-          <img src="games/mindgrid-icon.png" alt="MindGrid icon">
-          <div><h1 id="feat-title">MindGrid</h1><p>Daily Logic Puzzles · Puzzle</p></div>
+  <!-- HERO SLIDESHOW: every game gets a slide -->
+  <h1 class="sr">MZA Games: puzzle games for Android and the web</h1>
+  <section class="hero" id="hero" aria-roledescription="carousel" aria-label="Featured games">
+    <button class="harrow prev" type="button" aria-label="Previous game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="harrow next" type="button" aria-label="Next game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="track" id="track">
+
+      <!-- 1 MindGrid -->
+      <article class="slide" id="slide-mindgrid" role="group" aria-roledescription="slide" aria-label="1 of 4: MindGrid"
+        style="--sbg:radial-gradient(120% 140% at 0% 0%,#1e1b4b 0%,#0f172a 45%,#111827 100%);--sglow:radial-gradient(40% 50% at 85% 20%,rgba(223,150,40,.35),transparent 70%),radial-gradient(35% 45% at 70% 90%,rgba(123,92,224,.35),transparent 70%),radial-gradient(30% 40% at 15% 100%,rgba(23,153,138,.35),transparent 70%)">
+        <div class="sgrid">
+          <div>
+            <div class="feyebrow"><span class="badge hot"><i></i>New · Beta on Google Play</span></div>
+            <div class="fhead"><img src="games/mindgrid-icon.png" alt="MindGrid icon"><div><h2>MindGrid</h2><p>Daily Logic Puzzles · Puzzle</p></div></div>
+            <p class="fpitch">Six calm logic puzzles every day: Blocks, Pipes, Link, Crowns, Glow and Balance. Includes an endless Journey, a free Archive, streaks and stats.</p>
+            <ul class="fchips"><li>6 puzzle types</li><li>4 difficulties</li><li>Works offline</li></ul>
+            <div class="factions">
+              <a class="btn play" href="https://play.google.com/apps/testing/com.mzagaming.mindgrid"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8.9.6l16-9.2c.4-.2.4-.8 0-1L4.9 2.2c-.4-.2-.9.1-.9.6z"/></svg><span class="two"><small>Android beta</small>Google Play</span></a>
+              <a class="btn ghost" href="https://mzagames.github.io/mindgrid/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Play in browser</a>
+            </div>
+            <p class="fnote">Closed testing on Android. <a href="#beta">How to join</a> · <a href="https://mzagames.github.io/mindgrid/privacy.html">Privacy</a> · <a href="https://github.com/mzagames/mindgrid">Source</a></p>
+          </div>
+          <div class="visual phones" aria-hidden="true">
+            <img src="games/mindgrid/02-crowns.jpg" alt="">
+            <img src="games/mindgrid/05-balance.jpg" alt="">
+            <img src="games/mindgrid/01-today.jpg" alt="">
+          </div>
         </div>
-        <p class="fpitch">Six calm logic puzzles every day: Blocks, Pipes, Link, Crowns, Glow and Balance. Includes an endless Journey, a free Archive, streaks and stats.</p>
-        <ul class="fchips"><li>6 puzzle types</li><li>4 difficulties</li><li>Daily challenges</li><li>Works offline</li><li>No account needed</li></ul>
-        <div class="factions">
-          <a class="btn play" href="https://play.google.com/apps/testing/com.mzagaming.mindgrid">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8.9.6l16-9.2c.4-.2.4-.8 0-1L4.9 2.2c-.4-.2-.9.1-.9.6z"/></svg>
-            <span class="two"><small>Android beta</small>Google Play</span></a>
-          <a class="btn ghost" href="https://mzagames.github.io/mindgrid/">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-            Play in browser</a>
+      </article>
+
+      <!-- 2 Color Circuit -->
+      <article class="slide" id="slide-colorcircuit" role="group" aria-roledescription="slide" aria-label="2 of 4: Color Circuit"
+        style="--sbg:radial-gradient(120% 140% at 0% 0%,#14213d 0%,#0b1220 50%,#0a0f1a 100%);--sglow:radial-gradient(40% 50% at 82% 22%,rgba(255,95,126,.38),transparent 70%),radial-gradient(35% 45% at 66% 92%,rgba(80,150,255,.35),transparent 70%),radial-gradient(30% 40% at 10% 100%,rgba(255,196,90,.25),transparent 70%)">
+        <div class="sgrid">
+          <div>
+            <div class="feyebrow"><span class="badge"><i></i>Beta on Google Play</span></div>
+            <div class="fhead"><img src="games/colorcircuit-icon.png" alt="Color Circuit icon"><div><h2>Color Circuit</h2><p>Connect &amp; Mix · Puzzle</p></div></div>
+            <p class="fpitch">Rotate circuits, mix colors and connect every source to its output. 300 handcrafted levels across three modes.</p>
+            <ul class="fchips"><li>300 levels</li><li>Color mixing</li><li>3 modes</li></ul>
+            <div class="factions">
+              <a class="btn play" href="https://play.google.com/apps/testing/com.mzagaming.colorcircuit"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8.9.6l16-9.2c.4-.2.4-.8 0-1L4.9 2.2c-.4-.2-.9.1-.9.6z"/></svg><span class="two"><small>Android beta</small>Google Play</span></a>
+              <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.mzagaming.colorcircuit">Google Play page</a>
+            </div>
+            <p class="fnote">Closed testing on Android. <a href="#beta">How to join</a></p>
+          </div>
+          <div class="visual art" aria-hidden="true" style="--halo:conic-gradient(#ff5f7e,#5096ff,#4fe3b5,#ffc45a,#ff5f7e)">
+            <span class="halo"></span><img class="bigicon" src="games/colorcircuit-icon.png" alt="">
+            <span class="pill p1" style="--pill:#ff5f7e"><b>●</b> 300 levels</span>
+            <span class="pill p2" style="--pill:#5096ff"><b>●</b> Mix colors</span>
+            <span class="pill p3" style="--pill:#4fe3b5"><b>●</b> 3 game modes</span>
+          </div>
         </div>
-        <p class="fnote">Android version is in closed testing. <a href="#beta">How to join</a> · <a href="https://mzagames.github.io/mindgrid/privacy.html">Privacy</a> · <a href="https://github.com/mzagames/mindgrid">Source</a></p>
-      </div>
-      <div class="shots" tabindex="0" aria-label="MindGrid screenshots">
-        <img src="games/mindgrid/01-today.jpg" alt="Today screen with six daily puzzles" loading="lazy">
-        <img src="games/mindgrid/02-crowns.jpg" alt="Crowns puzzle" loading="lazy">
-        <img src="games/mindgrid/03-link.jpg" alt="Link puzzle" loading="lazy">
-        <img src="games/mindgrid/04-pipes.jpg" alt="Pipes puzzle" loading="lazy">
-        <img src="games/mindgrid/05-balance.jpg" alt="Balance puzzle" loading="lazy">
-        <img src="games/mindgrid/06-archive.jpg" alt="Archive calendar" loading="lazy">
-        <img src="games/mindgrid/07-stats.jpg" alt="Stats screen" loading="lazy">
-      </div>
+      </article>
+
+      <!-- 3 Arrowku -->
+      <article class="slide" id="slide-arrowku" role="group" aria-roledescription="slide" aria-label="3 of 4: Arrowku"
+        style="--sbg:radial-gradient(120% 140% at 0% 0%,#1a2e05 0%,#0e1a04 50%,#0a0f05 100%);--sglow:radial-gradient(42% 52% at 82% 25%,rgba(137,249,7,.32),transparent 70%),radial-gradient(30% 40% at 12% 100%,rgba(101,163,13,.3),transparent 70%)">
+        <div class="sgrid">
+          <div>
+            <div class="feyebrow"><span class="badge"><i></i>Beta on Google Play</span></div>
+            <div class="fhead"><img src="games/arrowku-icon.png" alt="Arrowku icon"><div><h2>Arrowku</h2><p>Arrow Puzzles · Puzzle</p></div></div>
+            <p class="fpitch">Untangle calm arrow puzzles and collect 520 cute kawaii pictures, one level at a time.</p>
+            <ul class="fchips"><li>12,000 levels</li><li>240 worlds</li><li>Zen mode</li></ul>
+            <div class="factions">
+              <a class="btn play" href="https://play.google.com/apps/testing/com.directional_arrows"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8.9.6l16-9.2c.4-.2.4-.8 0-1L4.9 2.2c-.4-.2-.9.1-.9.6z"/></svg><span class="two"><small>Android beta</small>Google Play</span></a>
+              <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.directional_arrows">Google Play page</a>
+            </div>
+            <p class="fnote">Closed testing on Android. <a href="#beta">How to join</a> · <a href="https://sites.google.com/view/privacypolicydirectionalarrows/home">Privacy</a></p>
+          </div>
+          <div class="visual art" aria-hidden="true" style="--halo:#89f907">
+            <span class="halo"></span><img class="bigicon" src="games/arrowku-icon.png" alt="">
+            <span class="pill p1" style="--pill:#89f907"><b>➜</b> 12,000 levels</span>
+            <span class="pill p2" style="--pill:#89f907"><b>➜</b> 240 worlds</span>
+            <span class="pill p3" style="--pill:#89f907"><b>➜</b> 520 pictures</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4 Wood Fit -->
+      <article class="slide" id="slide-woodfit" role="group" aria-roledescription="slide" aria-label="4 of 4: Wood Fit: IQ Master"
+        style="--sbg:radial-gradient(120% 140% at 0% 0%,#3b1d08 0%,#24120a 50%,#170c06 100%);--sglow:radial-gradient(42% 52% at 82% 25%,rgba(242,201,139,.3),transparent 70%),radial-gradient(30% 40% at 12% 100%,rgba(180,83,9,.35),transparent 70%)">
+        <div class="sgrid">
+          <div>
+            <div class="feyebrow"><span class="badge" style="background:rgba(246,196,83,.2);color:#fde68a"><i></i>Coming soon</span></div>
+            <div class="fhead"><img src="games/woodfit-icon.png" alt="Wood Fit: IQ Master icon"><div><h2>Wood Fit: IQ Master</h2><p>Block Puzzle · Puzzle</p></div></div>
+            <p class="fpitch">A cozy wooden block puzzle with a Daily Carving, streaks and a for-fun Puzzle IQ.</p>
+            <ul class="fchips"><li>Block puzzles</li><li>Daily Carving</li><li>Offline</li></ul>
+            <div class="factions">
+              <span class="btn off"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 2.8v18.4c0 .5.5.8.9.6l16-9.2c.4-.2.4-.8 0-1L4.9 2.2c-.4-.2-.9.1-.9.6z"/></svg>Coming soon to Google Play</span>
+            </div>
+            <p class="fnote">Want to test it first? <a href="#support">Email us</a> · <a href="woodfit/privacy.html">Privacy</a></p>
+          </div>
+          <div class="visual art" aria-hidden="true" style="--halo:#f2c98b">
+            <span class="halo"></span><img class="bigicon" src="games/woodfit-icon.png" alt="">
+            <span class="pill p1" style="--pill:#f6c453"><b>■</b> Daily Carving</span>
+            <span class="pill p2" style="--pill:#f6c453"><b>■</b> Puzzle IQ</span>
+            <span class="pill p3" style="--pill:#f6c453"><b>■</b> Play offline</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="htabs" role="tablist" aria-label="Choose a game">
+      <button class="htab" type="button" role="tab" aria-selected="true" aria-controls="slide-mindgrid"><img src="games/mindgrid-icon.png" alt=""><span><b>MindGrid</b><small>Beta · Android + Web</small></span><i></i></button>
+      <button class="htab" type="button" role="tab" aria-selected="false" aria-controls="slide-colorcircuit"><img src="games/colorcircuit-icon.png" alt=""><span><b>Color Circuit</b><small>Beta · Android</small></span><i></i></button>
+      <button class="htab" type="button" role="tab" aria-selected="false" aria-controls="slide-arrowku"><img src="games/arrowku-icon.png" alt=""><span><b>Arrowku</b><small>Beta · Android</small></span><i></i></button>
+      <button class="htab" type="button" role="tab" aria-selected="false" aria-controls="slide-woodfit"><img src="games/woodfit-icon.png" alt=""><span><b>Wood Fit</b><small>Coming soon</small></span><i></i></button>
     </div>
   </section>
 
@@ -295,6 +415,7 @@ footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margi
 </main>
 
 <footer>
+  <a href="./" class="flogo" aria-label="MZA Games store home"><img src="mza-games-logo.png" alt="MZA Games" width="94" height="48"></a>
   <nav aria-label="Footer">
     <a href="#games">Games</a><a href="#beta">Beta</a><a href="https://github.com/mzagames">GitHub</a>
     <a href="https://mzagames.github.io/mindgrid/privacy.html">MindGrid privacy</a><a href="woodfit/privacy.html">Wood Fit privacy</a>
@@ -303,6 +424,59 @@ footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margi
 </footer>
 
 <script>
+/* Hero slideshow: swipe/scroll-snap natively, arrows + tabs, autoplay that pauses on hover, focus, hidden tab and reduced motion. */
+(function () {
+  var hero = document.getElementById('hero'), track = document.getElementById('track');
+  var slides = [].slice.call(track.querySelectorAll('.slide'));
+  var tabs = [].slice.call(hero.querySelectorAll('.htab'));
+  var DUR = 7000, cur = 0, elapsed = 0, last = 0, hover = false, focus = false;
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function mark(i) {
+    cur = i;
+    slides.forEach(function (s, k) { var on = k === i; s.inert = !on; s.setAttribute('aria-hidden', String(!on)); });
+    tabs.forEach(function (t, k) { t.setAttribute('aria-selected', String(k === i)); t.tabIndex = k === i ? 0 : -1; t.querySelector('i').style.width = '0'; });
+  }
+  function go(i) {
+    i = (i + slides.length) % slides.length;
+    track.scrollTo({ left: i * track.clientWidth, behavior: still ? 'auto' : 'smooth' });
+    mark(i); elapsed = 0;
+  }
+  hero.querySelector('.prev').addEventListener('click', function () { go(cur - 1); });
+  hero.querySelector('.next').addEventListener('click', function () { go(cur + 1); });
+  tabs.forEach(function (t, k) {
+    t.addEventListener('click', function () { go(k); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { e.preventDefault(); go(cur + d); tabs[cur].focus(); }
+    });
+  });
+  // user swipes: pick up the slide the scroll settled on
+  var st;
+  track.addEventListener('scroll', function () {
+    clearTimeout(st);
+    st = setTimeout(function () { var i = Math.round(track.scrollLeft / track.clientWidth); if (i !== cur) { mark(i); elapsed = 0; } }, 90);
+  }, { passive: true });
+  window.addEventListener('resize', function () { track.scrollLeft = cur * track.clientWidth; });
+  hero.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
+  hero.addEventListener('pointerleave', function () { hover = false; });
+  hero.addEventListener('focusin', function () { focus = true; });
+  hero.addEventListener('focusout', function () { focus = false; });
+
+  mark(0);
+  if (still) return;
+  function tick(t) {
+    var dt = last ? t - last : 0; last = t;
+    if (!hover && !focus && !document.hidden) {
+      elapsed += dt;
+      tabs[cur].querySelector('i').style.width = Math.min(100, elapsed / DUR * 100) + '%';
+      if (elapsed >= DUR) go(cur + 1);
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
 (function () {
   var buttons = document.querySelectorAll('.filters button');
   var games = document.querySelectorAll('#grid .game');
